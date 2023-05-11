@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1574</width>
-    <height>866</height>
+    <width>1586</width>
+    <height>898</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -631,6 +631,7 @@ QGroupBox::title {
  </tabstops>
  <resources>
   <include location="Resource/Myqrc.qrc"/>
+  <include location="C:/Users/13959/.designer/backup/Resource/Myqrc.qrc"/>
  </resources>
  <connections/>
 </ui>
