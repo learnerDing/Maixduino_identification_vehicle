@@ -20,10 +20,10 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(2)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setStyleSheet("QMainWindow{\n"
-"    background-image:url(\"D:\\我的桌面\\b站自学\\pythonProject2\\Resource\\Pic\\v2-12c09440b7049d539b5e9cd86665d48a_1440w.jpg\")\n"
-"}\n"
-"")
+#         MainWindow.setStyleSheet("QMainWindow{\n"
+# "    background-image:url(\"D:\\我的桌面\\b站自学\\pythonProject2\\Resource\\Pic\\v2-12c09440b7049d539b5e9cd86665d48a_1440w.jpg\")\n"
+# "}\n"
+# "")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.Pic_frame = QtWidgets.QFrame(self.centralwidget)

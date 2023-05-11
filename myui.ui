@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1574</width>
-    <height>866</height>
+    <width>1586</width>
+    <height>898</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -506,6 +506,12 @@ QGroupBox::title {
 }
 
 </string>
+     </property>
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>360</number>
      </property>
     </widget>
     <widget class="QPushButton" name="Right">
