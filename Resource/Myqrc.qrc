@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="path">
+    <file>Pic/img1.wallspic.com-chou_xiang_yi_shu-jian_yue-qi_fen-sheng_tai_qu-azure-3840x2160.jpg</file>
+    <file>Pic/4k2.jpg</file>
+    <file>Pic/4k1.jpg</file>
+    <file>Pic/background.jpg</file>
+    <file>Pic/v2-12c09440b7049d539b5e9cd86665d48a_1440w.jpg</file>
+    <file>Pic/tomjerry.jpg</file>
+    <file>Pic/伞-小车.png</file>
+    <file>Pic/小车.png</file>
+    <file>Icon/caret-down.png</file>
+    <file>Icon/caret-left.png</file>
+    <file>Icon/caret-right.png</file>
+    <file>Icon/caret-up.png</file>
+  </qresource>
+  <qresource prefix="新前缀"/>
+</RCC>
