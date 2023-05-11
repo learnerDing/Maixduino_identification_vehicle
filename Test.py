@@ -52,7 +52,7 @@ height = 240
 
 # jpeg 20 fps
 # esp32 spi dma temp buffer MAX Len: 4k
-
+# ESP32芯片的SPI总线DMA临时缓冲区大小为4096个字节。
 
 def receiveThread(conn):
     conn.settimeout(10)
@@ -63,6 +63,7 @@ def receiveThread(conn):
             break
         img = b""
         tmp = b''
+        #此循环每执行一次会读取一个字节，读取两次之后如果是b'\xFF\xD8'说明这是一张JPEG格式的照片文件
         while True:
             try:
                 client_data = conn.recv(1)
@@ -70,12 +71,12 @@ def receiveThread(conn):
                 conn_end = True
                 break
             if tmp == b'\xFF' and client_data == b'\xD8':
-                img = b'\xFF\xD8'
+                img = b'\xFF\xD8'#判断完毕，还原图片数据完整性
                 break
             tmp = client_data
         while True:
             try:
-                client_data = conn.recv(4096)
+                client_data = conn.recv(4096)#ESP32芯片的SPI总线DMA临时缓冲区大小为4096个字节。
             except socket.timeout:
                 client_data = None
                 conn_end = True
@@ -83,12 +84,12 @@ def receiveThread(conn):
                 break
             # print("received data,len:",len(client_data) )
             img += client_data
-            if img[-2:] == b'\xFF\xD9':
+            if img[-2:] == b'\xFF\xD9':#读取到\xFF\xD9字节说明这是一张JEPG图片的结尾部分
                 break
-            if len(client_data) > pack_size:
+            if len(client_data) > pack_size:#超过图片包上限也结束读取
                 break
         print("recive end, pic len:", len(img))
-
+        #再次检查图片字节串的开始以及结束字符
         if not img.startswith(b'\xFF\xD8') or not img.endswith(b'\xFF\xD9'):
             print("image error")
             continue
