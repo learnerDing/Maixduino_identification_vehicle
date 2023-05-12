@@ -1,3 +1,4 @@
+#2023.5.12
 import sensor,image,lcd,time
 import KPU as kpu
 import socket
