@@ -1,6 +1,6 @@
 # 导入模块
 import sys
-import socket
+import socket,serial
 import threading
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow
@@ -16,8 +16,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         # 设置窗户大小固定为初始尺寸
         self.setFixedSize(self.size())
-
-        # 初始化并启动接收线程类
+    #region初始化并启动接收线程类
         self.receive_thread = ReceiveThread()
         # 信号与槽函数绑定
         # 接收数据线程绑定
@@ -25,8 +24,38 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.receive_thread.msg_data_signal.connect(self.display_text)
         self.receive_thread.ip_signal.connect(self.Low_ip_show)  # 用Low_ip_show来接收发送来的地址信息
         self.receive_thread.start()
+        # endregion
+
         # 主线程（窗口线程）绑定
-        self.Sendmssg.clicked.connect(self.on_Sendmssg_clicked)
+
+        self.serial = serial.Serial(port='COM23',baudrate=115200,timeout=1)
+        # 创建线程
+        self.send_serial_thread = Stm32ControlThread(self.serial)
+        self.send_serial_thread.start()
+
+        # 信号
+        self.Up.clicked.connect(lambda: self.send_serial_data("CM:up"))
+        self.Down.clicked.connect(lambda: self.send_serial_data("CM:down"))
+        self.Left.clicked.connect(lambda: self.send_serial_data("CM:left"))
+        self.Right.clicked.connect(lambda: self.send_serial_data("CM:right"))
+        self.Stop.clicked.connect(lambda :self.send_serial_data("CM:stop"))
+        self.Xunji.clicke.connect(lambda:self.send_serial_data("X"))
+        self.dial.valueChanged.connect(self.update_dial_value)
+
+        # 更新QTextBrowser
+        self.send_serial_thread.update_text_browser.connect(self.update_text_browser)
+
+
+    def send_serial_data(self, data):
+        self.send_serial_thread.send_serial_data(data)
+
+    def update_dial_value(self, value):
+        data = f'AG: {value}'
+        self.send_serial_data(data)
+
+    def update_text_browser(self, data):
+        self.text_browser.append(data)
+
 
     def update_image(self, img_data):
         # 将收到的QImage类型转换为QPixmap并显示在QLabel上
@@ -83,7 +112,6 @@ class ReceiveThread(QtCore.QThread):
 
 
     def receive_pic(self,img,tmp):
-
         # 此循环每执行一次会读取一个字节，读取两次之后如果是b'\xFF\xD8'说明这是一张JPEG格式的照片文件
         while True:
             try:
@@ -172,9 +200,18 @@ class ReceiveThread(QtCore.QThread):
         message = message.encode('utf-8')
         # 使用连接的套接字发送消息
         self.conn.sendall(message)
-#发送串口信息线程
-class Stm32_control_thread():
-    pass
+
+#控制stm32线程
+class Stm32ControlThread(QtCore.QThread):
+    update_text_browser = QtCore.pyqtSignal(str)
+
+    def __init__(self, serial_port):
+        super().__init__()
+        self.Myserial = serial_port
+
+    def send_serial_data(self,data):
+        self.Myserial.write(data.encode())
+        self.update_text_browser.emit(data)
 
 
 if __name__ == '__main__':
